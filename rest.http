@@ -1,8 +1,8 @@
-GET http://127.0.0.1:5000/api/auth/login/
+POST http://127.0.0.1:5000/api/auth/register/
 Content-Type: application/json
 
 {
-    "name": "johndoe",
-    "email": "john@example.com",
-    "password": "password"
+    "name": "kevin",
+    "email": "kevin@test.com",
+    "password": "aaaaaaaaa"
 }

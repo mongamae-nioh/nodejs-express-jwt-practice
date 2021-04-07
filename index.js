@@ -1,3 +1,5 @@
+// https://reffect.co.jp/node-js/express-js%E3%81%A7json-web-tokenjwt%E3%81%AE%E8%A8%AD%E5%AE%9A%E3%82%92%E8%A1%8C%E3%81%86
+
 const express = require('express')
 const app = express()
 const port = 5000
@@ -12,36 +14,13 @@ const db = new sqlite3.Database('./database/database.sqlite3', (err) => {
     console.log('Connected to the SQlite database.');
   });
 
+app.use(express.json())
 app.get('/', (request, response) => response.send('Hello World!!'))
-
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
-
-let sql = `CREATE TABLE USERS(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE,
-    email TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL
-    )`
-
-/*
-db.run(sql,(err) => {
-    if(err) {
-        return console.error(err.message);
-    }
-        console.log('table created');
-    }
- )
-*/
 
 const bcrypt = require('bcrypt')
 const saltRounds = 10
-const insert = 'INSERT INTO USERS (name, email, password) VALUES (?,?,?)'
-
-/*
-bcrypt.hash("password", saltRounds, (err, hash) => {
-    db.run(insert, ["johndoe","john@example.com",hash])
-})
-*/
+//const insert = 'INSERT INTO USERS (name, email, password) VALUES (?,?,?)'
 
 app.get("/api/users", (req, res, next) => {
     const sql = "select * from users"
@@ -58,7 +37,8 @@ app.get("/api/users", (req, res, next) => {
 });
 
 app.post('/api/auth/register/', (req, res) => {
-    const insert = 'INSERT INTO USERS (name, email, password) VALUES (?,?,?)'
+    const insert = 'INSERT INTO users (name, email, password) VALUES (?,?,?)'
+    console.log("password is", req.body.password)
     bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
       db.run(insert, [req.body.name,req.body.email,hash],(err) => {
         if (err) {
@@ -71,6 +51,7 @@ app.post('/api/auth/register/', (req, res) => {
       })
     })
   })
+
 
 app.post('/api/auth/login/',(req,res) => {
     const sql = 'select * from users where email = ?'
@@ -102,4 +83,3 @@ app.post('/api/auth/login/',(req,res) => {
     })
   })
   
-//app.use(express.json())
