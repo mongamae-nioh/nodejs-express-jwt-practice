@@ -83,3 +83,19 @@ app.post('/api/auth/login/',(req,res) => {
     })
   })
   
+app.get('/api/auth/user/',(req,res) => {
+
+  const bearToken = req.headers['authorization']
+  const bearer = bearToken.split(' ')
+  const token = bearer[1]
+
+  jwt.verify(token,'secret',(err,user)=>{
+    if(err){
+      return res.sendStatus(403)
+    }else{
+      return res.json({
+            user
+          });
+    }
+  })
+});
