@@ -1,0 +1,8 @@
+GET http://127.0.0.1:5000/api/auth/login/
+Content-Type: application/json
+
+{
+    "name": "johndoe",
+    "email": "john@example.com",
+    "password": "password"
+}
